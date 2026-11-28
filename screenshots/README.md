@@ -1,3 +1,3 @@
 # Lab evidence
 
-Upload the eight sanitized PNG screenshots here. The main README documents the verified results. Screenshots are pending upload.
+Microsoft Entra ID portal and PowerShell captures covering cloud users, security groups, delegated administration, authentication methods, audit logging and group membership verification.
