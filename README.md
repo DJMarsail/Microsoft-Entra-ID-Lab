@@ -1,97 +1,72 @@
 # Microsoft Entra ID | Cloud Identity & Access Management Lab
 
-**Project status: In progress**
+**Status: Technical implementation complete; screenshot publication pending.**
 
 ## Overview
 
-This hands-on lab simulates identity administration for a fictional enterprise, Contoso Labs, using Microsoft Entra ID. The project focuses on employee provisioning, departmental security groups, delegated administration, least privilege, and planned identity automation.
+A hands-on cloud identity administration lab for a fictional enterprise, Contoso Labs, using Microsoft Entra ID Free and Microsoft Graph PowerShell.
 
-## Technologies
-
-- Microsoft Entra ID (Free)
-- Microsoft Azure portal
-- Microsoft Graph PowerShell (planned)
-
-## Lab Architecture
+## Architecture
 
 ```mermaid
 flowchart TD
-    T[Microsoft Entra ID Tenant] --> A[Global Administrator]
-    T --> U[Cloud Users]
-    T --> G[Departmental Security Groups]
-    U --> B[Bob Jones]
+    T[Entra ID tenant] --> A[Global Administrator]
+    T --> H[SG-HR]
+    T --> I[SG-IT-Support]
+    T --> S[SG-Sales]
+    H --> AL[Alice Smith]
+    I --> B[Bob Jones]
+    S --> C[Carol Davis]
+    S --> D[David Miller]
     B --> R[Helpdesk Administrator]
-    G --> H[SG-HR]
-    G --> I[SG-IT-Support]
-    G --> S[SG-Sales]
+    A --> P[Microsoft Graph PowerShell]
+    P --> D
 ```
 
-## 1. Tenant Configuration
+## Identity provisioning and security groups
 
-Configured a dedicated Microsoft Entra ID tenant for a simulated enterprise environment using the free licensing tier.
+| Employee | Department | Job title | Employee ID | Security group |
+|---|---|---|---|---|
+| Alice Smith | Human Resources | HR Specialist | 1001 | SG-HR |
+| Bob Jones | IT Support | IT Support Technician | 1002 | SG-IT-Support |
+| Carol Davis | Sales | Sales Representative | 1003 | SG-Sales |
+| David Miller | Sales | Sales Associate | 1004 | SG-Sales |
 
-## 2. Employee Provisioning
+The first three fictional employee accounts were provisioned manually. David was provisioned through Microsoft Graph PowerShell and automatically added to SG-Sales. All four employee accounts were verified as enabled. Groups use assigned membership; no application or resource access assignments were tested.
 
-Created three cloud user accounts with organizational attributes, including job titles, departments and employee IDs.
+## Security validation
 
-| Employee | Job title | Department |
-|---|---|---|
-| Alice Smith | HR Specialist | Human Resources |
-| Bob Jones | IT Support Technician | IT Support |
-| Carol Davis | Sales Representative | Sales |
-
-All employee identities are fictional lab accounts.
-
-## 3. Security Groups
-
-Created assigned-membership security groups to model departmental access.
-
-| Security group | Intended membership |
+| Test | Observed result |
 |---|---|
-| SG-HR | Alice Smith |
-| SG-IT-Support | Bob Jones |
-| SG-Sales | Carol Davis |
+| Delegated administration | Bob assigned the built-in Helpdesk Administrator role directly |
+| Password reset | Bob successfully reset Alice's password |
+| Least privilege | Add assignments was disabled when signed in as Bob |
+| MFA | Microsoft Authenticator enrolled and used by Bob |
+| Audit logging | Successful password reset recorded in Alice's audit logs with Bob as actor |
+| Group membership audit | All four employees returned in their expected groups |
+| Automated onboarding | David's account and Sales membership independently verified |
+| CSV inventory | User attributes and enabled status successfully exported |
 
-Departmental membership is the foundation for future access assignments; group creation alone does not grant access to applications or resources.
+The least-privilege test was performed in the Entra portal; it was not a comprehensive API authorization assessment.
 
-## 4. Role-Based Access Control (RBAC)
+## PowerShell automation
 
-Assigned the built-in Helpdesk Administrator directory role to Bob Jones to model delegated IT support responsibilities without granting Global Administrator privileges.
+Install the SDK with `Install-Module Microsoft.Graph -Scope CurrentUser`. Run scripts using an authorized account in a lab tenant. Delegated Graph scopes are requested interactively.
 
-## 5. Security Validation
+| Script | Purpose |
+|---|---|
+| [New-Employee.ps1](scripts/New-Employee.ps1) | Provision an employee, require password change at first sign-in, assign departmental group |
+| [Get-GroupMembership.ps1](scripts/Get-GroupMembership.ps1) | Enumerate direct security group memberships |
+| [Export-UserInventory.ps1](scripts/Export-UserInventory.ps1) | Export user inventory to CSV |
 
-Planned tests:
+These are parameterized adaptations of the commands successfully executed in the lab. The standalone script versions have not been independently executed. No passwords or tenant identifiers are hardcoded.
 
-- Verify delegated password reset for a non-administrative user.
-- Verify restrictions on privileged role assignment.
-- Review MFA configuration and available audit logs.
+## Evidence
 
-## 6. PowerShell Automation
+[Screen captures](screenshots/) document provisioning, group membership, directory configuration, delegated roles, MFA, audit logs and portal permission restrictions. Sanitized PNG files are pending upload.
 
-Planned Microsoft Graph PowerShell workflows:
+## Scope and related project
 
-- Retrieve cloud user accounts.
-- Enumerate security groups and memberships.
-- Automate employee provisioning.
-- Export an identity inventory to CSV.
+This lab uses Entra ID Free. Intune, Conditional Access, Microsoft 365 administration and hybrid synchronization were not implemented.
 
-## 7. Project Evidence
-
-Screenshots and validated scripts will be added as implementation progresses. Credentials and personal account information will not be published.
-
-## Implementation Progress
-
-- [x] Configure Entra ID tenant
-- [x] Provision cloud employee accounts
-- [x] Create departmental security groups
-- [x] Assign delegated Helpdesk Administrator role
-- [ ] Complete permission validation
-- [ ] Review MFA and audit logs
-- [ ] Implement and test PowerShell automation
-- [ ] Publish sanitized evidence
-
-## Related Project
-
-[Active Directory Home Lab](https://github.com/DJMarsail/Active-directory-home-lab) — Windows Server, Active Directory Domain Services, Group Policy, DNS and file-share access control.
-
-The two labs currently operate independently. Hybrid identity synchronization is a potential future extension, not an implemented feature.
+[Active Directory Home Lab](https://github.com/DJMarsail/Active-directory-home-lab) demonstrates Windows Server, AD DS, Group Policy, DNS and file-share access control. The two environments operate independently.
