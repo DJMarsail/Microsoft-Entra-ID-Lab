@@ -1,7 +1,5 @@
 # Microsoft Entra ID | Cloud Identity & Access Management Lab
 
-**Status: Technical implementation complete; screenshot publication pending.**
-
 ## Overview
 
 A hands-on cloud identity administration lab for a fictional enterprise, Contoso Labs, using Microsoft Entra ID Free and Microsoft Graph PowerShell.
@@ -38,7 +36,7 @@ The first three fictional employee accounts were provisioned manually. David was
 
 | Test | Observed result |
 |---|---|
-| Delegated administration | Bob assigned the built-in Helpdesk Administrator role directly |
+| Delegated administration | Bob received a direct assignment to the built-in Helpdesk Administrator role |
 | Password reset | Bob successfully reset Alice's password |
 | Least privilege | Add assignments was disabled when signed in as Bob |
 | MFA | Microsoft Authenticator enrolled and used by Bob |
@@ -51,7 +49,7 @@ The least-privilege test was performed in the Entra portal; it was not a compreh
 
 ## PowerShell automation
 
-Install the SDK with `Install-Module Microsoft.Graph -Scope CurrentUser`. Run scripts using an authorized account in a lab tenant. Delegated Graph scopes are requested interactively.
+The scripts use the Microsoft Graph PowerShell SDK and interactive delegated authentication.
 
 | Script | Purpose |
 |---|---|
@@ -59,11 +57,11 @@ Install the SDK with `Install-Module Microsoft.Graph -Scope CurrentUser`. Run sc
 | [Get-GroupMembership.ps1](scripts/Get-GroupMembership.ps1) | Enumerate direct security group memberships |
 | [Export-UserInventory.ps1](scripts/Export-UserInventory.ps1) | Export user inventory to CSV |
 
-These are parameterized adaptations of the commands successfully executed in the lab. The standalone script versions have not been independently executed. No passwords or tenant identifiers are hardcoded.
+The scripts package the lab commands into reusable, parameterized utilities. Validation was performed using interactive PowerShell commands rather than standalone script execution. No passwords or tenant identifiers are hardcoded.
 
 ## Evidence
 
-[Screen captures](screenshots/) document provisioning, group membership, directory configuration, delegated roles, MFA, audit logs and portal permission restrictions. Sanitized PNG files are pending upload.
+[Screen captures](screenshots/) document provisioning, group membership, directory configuration, delegated roles, MFA, audit logs and portal permission restrictions.
 
 ## Scope and related project
 
